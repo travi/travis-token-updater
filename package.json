@@ -51,11 +51,13 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.64.1",
     "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "sinon": "^6.1.4",
     "travis-lint": "^1.0.0"
   },
   "dependencies": {
     "@octokit/rest": "^15.9.5",
+    "inquirer": "^6.1.0",
     "netrc": "^0.1.4"
   }
 }

@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import {assert} from 'chai';
 import any from '@travi/any';
-import {getList} from '../../src/organizations';
+import {getList} from '../../../src/account/organizations';
 
 suite('fetch organizations', () => {
   test('that the list of orgs is fetched for the authenticated session', async () => {
