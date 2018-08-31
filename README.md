@@ -1,7 +1,5 @@
 # travis-token-updater
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/travi/travis-token-updater.svg)](https://greenkeeper.io/)
-
 tool for rolling tokens for multiple projects across an account
 
 <!-- status badges -->
@@ -27,6 +25,7 @@ $ npm install travis-token-updater
 [![Commitizen friendly][commitizen-badge]][commitizen-link]
 [![semantic-release][semantic-release-badge]][semantic-release-link]
 [![PRs Welcome][PRs-badge]][PRs-link]
+[![Greenkeeper badge](https://badges.greenkeeper.io/travi/travis-token-updater.svg)](https://greenkeeper.io/)
 
 ### Dependencies
 
