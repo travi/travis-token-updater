@@ -1,5 +1,7 @@
 # travis-token-updater
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/travi/travis-token-updater.svg)](https://greenkeeper.io/)
+
 tool for rolling tokens for multiple projects across an account
 
 <!-- status badges -->
