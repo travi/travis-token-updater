@@ -45,7 +45,7 @@ $ npm test
 [license-link]: LICENSE
 [license-badge]: https://img.shields.io/github/license/travi/travis-token-updater.svg
 [ci-link]: https://travis-ci.com/travi/travis-token-updater
-[ci-badge]: https://img.shields.io/travis/travi/travis-token-updater.svg?branch=master
+[ci-badge]: https://img.shields.io/travis/com/travi/travis-token-updater/master.svg
 [coverage-link]: https://codecov.io/github/travi/travis-token-updater
 [coverage-badge]: https://img.shields.io/codecov/c/github/travi/travis-token-updater.svg
 [commit-convention-link]: https://conventionalcommits.org
