@@ -56,7 +56,7 @@
     "travis-lint": "^1.0.0"
   },
   "dependencies": {
-    "@octokit/rest": "^15.9.5",
+    "@octokit/rest": "^16.0.1",
     "inquirer": "^6.1.0",
     "netrc": "^0.1.4"
   }
