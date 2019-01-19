@@ -52,7 +52,7 @@
     "rollup": "^0.66.0",
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-node-resolve": "^3.3.0",
-    "sinon": "^6.1.4",
+    "sinon": "^7.2.3",
     "travis-lint": "^1.0.0"
   },
   "dependencies": {
