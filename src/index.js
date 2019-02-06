@@ -1,1 +1,1 @@
-export function update() {}
+export {default as update} from './update';
