@@ -21,10 +21,10 @@ suite('github client factory', () => {
     const token = any.string();
     const authenticate = sinon.spy();
     const instance = {authenticate};
-    octokit.default.returns(instance);
     netrc.default.returns({'github.com': {login: token}});
+    octokit.default.withArgs({auth: `token ${token}`}).returns(instance);
 
     assert.equal(factory(), instance);
-    assert.calledWith(authenticate, {type: 'token', token});
+    assert.calledWithNew(octokit.default);
   });
 });
