@@ -32,11 +32,34 @@ suite('travis config files fetcher', () => {
     assert.deepEqual(callToListrConstructor.args[1], {concurrent: true});
     repoNames.forEach(async (name, index) => {
       const taskDefinition = callToListrConstructor.args[0][index];
+      const task = any.simpleObject();
       const config = any.simpleObject();
       getContents.withArgs({owner: account, repo: name, path: '.travis.yml'}).resolves(config);
 
       assert.equal(taskDefinition.title, `Fetching .travis.yml from ${name}`);
-      assert.equal(await taskDefinition.task(), config);
+      assert.equal(await taskDefinition.task({octokit: client, account}, task), config);
+      assert.equal(task.title, `Fetched .travis.yml from ${name}`);
+    });
+  });
+
+  test('that failure to find the config file in a repo does not result in failure', () => {
+    const getContents = sinon.stub();
+    const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContents}};
+    const account = any.word();
+    const repoNames = any.listOf(any.word);
+
+    fetchTravisConfigsFor({octokit: client, account, repoNames});
+
+    const callToListrConstructor = listr.default.getCall(0);
+    repoNames.forEach(async (name, index) => {
+      const taskDefinition = callToListrConstructor.args[0][index];
+      const errorMessage = any.string();
+      const task = any.simpleObject();
+      getContents.rejects(new Error(errorMessage));
+
+      await taskDefinition.task({octokit: client, account}, task);
+
+      assert.equal(task.title, `Received the following error when fetching .travis.yml from ${name}: ${errorMessage}`);
     });
   });
 });
