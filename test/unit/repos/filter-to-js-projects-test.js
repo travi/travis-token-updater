@@ -1,0 +1,48 @@
+import {assert} from 'chai';
+import any from '@travi/any';
+import sinon from 'sinon';
+import * as listr from '../../../third-party-wrappers/listr';
+import * as repos from '../../../src/account/repos';
+import filter from '../../../src/repos/filter-to-js-projects';
+import fetchTravisConfigFiles from '../../../src/repos/fetch-travis-config-files';
+import {listRepoNames} from '../../../src/repos/listr-tasks';
+
+suite('repos to js projects filter', () => {
+  let sandbox;
+
+  setup(() => {
+    sandbox = sinon.createSandbox();
+
+    sandbox.stub(listr, 'default');
+    sandbox.stub(repos, 'listNames');
+  });
+
+  teardown(() => sandbox.restore());
+
+  test('that the account repos list is filtered to js projects', async () => {
+    const client = any.simpleObject();
+    const account = any.word();
+    const repoNames = any.listOf(any.word);
+    const listrPromise = any.simpleObject();
+    const run = sinon.stub();
+    run.withArgs({account, octokit: client}).returns(listrPromise);
+    listr.default
+      .withArgs([
+        {
+          title: `Determining list of repositories for ${account}`,
+          task: listRepoNames
+        },
+        {
+          title: 'Fetching Travis-CI config files for each repository',
+          task: fetchTravisConfigFiles
+        }
+      ])
+      .returns({run});
+    repos.listNames.withArgs(client, account).resolves(repoNames);
+
+    const promise = filter(client, account);
+
+    assert.calledWithNew(listr.default);
+    assert.equal(promise, listrPromise);
+  });
+});

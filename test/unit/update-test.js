@@ -3,22 +3,27 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import * as githubClientFactory from '../../src/github-client-factory';
 import * as accountChooser from '../../src/account/choose';
-import * as repos from '../../src/account/repos';
+import * as jsRepos from '../../src/repos/filter-to-js-projects';
 import {update} from '../../src';
 
 suite('update tokens', () => {
   let sandbox;
+  const error = new Error(any.simpleObject());
 
   setup(() => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(githubClientFactory, 'factory');
     sandbox.stub(accountChooser, 'choose');
-    sandbox.stub(repos, 'listNames');
+    sandbox.stub(jsRepos, 'default');
     sandbox.stub(console, 'log');
+    sandbox.stub(console, 'error');
   });
 
-  teardown(() => sandbox.restore());
+  teardown(() => {
+    sandbox.restore();
+    process.exitCode = 0;
+  });
 
   test('that tokens get updated for the chosen account', async () => {
     const account = any.word();
@@ -26,10 +31,29 @@ suite('update tokens', () => {
     const client = any.simpleObject();
     githubClientFactory.factory.returns(client);
     accountChooser.choose.withArgs(client).resolves(account);
-    repos.listNames.withArgs(client, account).returns(repoNames);
+    jsRepos.default.withArgs(client, account).resolves({repoNames});
 
     await update();
 
     assert.calledWith(console.log, repoNames);      // eslint-disable-line no-console
+  });
+
+  test('that an error from choosing the account is written to stderr', async () => {
+    accountChooser.choose.rejects(error);
+
+    await update();
+
+    assert.calledWith(console.error, error);      // eslint-disable-line no-console
+    assert.equal(process.exitCode, 1);
+  });
+
+  test('that an error from listing the js projects is written to stderr', async () => {
+    accountChooser.choose.resolves(any.simpleObject());
+    jsRepos.default.rejects(error);
+
+    await update();
+
+    assert.calledWith(console.error, error);      // eslint-disable-line no-console
+    assert.equal(process.exitCode, 1);
   });
 });

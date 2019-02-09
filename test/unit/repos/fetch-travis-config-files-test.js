@@ -20,17 +20,18 @@ suite('travis config files fetcher', () => {
     const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContent}};
     const account = any.word();
     const repoNames = any.listOf(any.word);
-    const listrPromise = any.simpleObject();
-    const run = () => listrPromise;
-    listr.default.returns({run});
+    const listrTasks = any.simpleObject();
+    listr.default.returns(listrTasks);
 
-    const promise = fetchTravisConfigsFor(client, account, repoNames);
+    const tasks = fetchTravisConfigsFor({octokit: client, account, repoNames});
 
     assert.calledWithNew(listr.default);
-    assert.equal(promise, listrPromise);
+    assert.equal(tasks, listrTasks);
 
+    const callToListrConstructor = listr.default.getCall(0);
+    assert.deepEqual(callToListrConstructor.args[1], {concurrent: true});
     repoNames.forEach(async (name, index) => {
-      const taskDefinition = listr.default.getCall(0).args[0][index];
+      const taskDefinition = callToListrConstructor.args[0][index];
       const config = any.simpleObject();
       getContent.withArgs({owner: account, repo: name, path: '.travis.yml'}).resolves(config);
 

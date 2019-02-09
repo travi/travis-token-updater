@@ -1,11 +1,17 @@
 import {factory as generateClient} from './github-client-factory';
 import {choose} from './account';
-import {listNames as listRepoNamesFor} from './account/repos';
+import listJavaScriptRepoNames from './repos/filter-to-js-projects';
 
 export default async function () {
   const octokit = generateClient();
-  const account = await choose(octokit);
-  const repoNames = await listRepoNamesFor(octokit, account);
 
-  console.log(repoNames);         // eslint-disable-line no-console
+  try {
+    const account = await choose(octokit);
+    const {repoNames} = await listJavaScriptRepoNames(octokit, account);
+
+    console.log(repoNames);         // eslint-disable-line no-console
+  } catch (err) {
+    process.exitCode = 1;
+    console.error(err);             // eslint-disable-line no-console
+  }
 }
