@@ -16,8 +16,8 @@ suite('travis config files fetcher', () => {
   teardown(() => sandbox.restore());
 
   test('that the config files are fetched for each repo', () => {
-    const getContent = sinon.stub();
-    const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContent}};
+    const getContents = sinon.stub();
+    const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContents}};
     const account = any.word();
     const repoNames = any.listOf(any.word);
     const listrTasks = any.simpleObject();
@@ -33,7 +33,7 @@ suite('travis config files fetcher', () => {
     repoNames.forEach(async (name, index) => {
       const taskDefinition = callToListrConstructor.args[0][index];
       const config = any.simpleObject();
-      getContent.withArgs({owner: account, repo: name, path: '.travis.yml'}).resolves(config);
+      getContents.withArgs({owner: account, repo: name, path: '.travis.yml'}).resolves(config);
 
       assert.equal(taskDefinition.title, `Fetching .travis.yml from ${name}`);
       assert.equal(await taskDefinition.task(), config);
