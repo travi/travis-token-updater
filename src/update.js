@@ -1,14 +1,11 @@
 import {factory as generateClient} from './github-client-factory';
 import {choose} from './account';
+import {listNames as listRepoNamesFor} from './account/repos';
 
 export default async function () {
   const octokit = generateClient();
-
   const account = await choose(octokit);
-
-  const repos = await octokit.repos.listForUser({username: account});
-
-  const repoNames = repos.data.map(repo => repo.name);
+  const repoNames = await listRepoNamesFor(octokit, account);
 
   console.log(repoNames);         // eslint-disable-line no-console
 }

@@ -3,6 +3,7 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import * as githubClientFactory from '../../src/github-client-factory';
 import * as accountChooser from '../../src/account/choose';
+import * as repos from '../../src/account/repos';
 import {update} from '../../src';
 
 suite('update tokens', () => {
@@ -13,6 +14,7 @@ suite('update tokens', () => {
 
     sandbox.stub(githubClientFactory, 'factory');
     sandbox.stub(accountChooser, 'choose');
+    sandbox.stub(repos, 'listNames');
     sandbox.stub(console, 'log');
   });
 
@@ -20,13 +22,11 @@ suite('update tokens', () => {
 
   test('that tokens get updated for the chosen account', async () => {
     const account = any.word();
-    const listForUser = sinon.stub();
     const repoNames = any.listOf(any.word);
-    const repos = repoNames.map(name => ({...any.simpleObject(), name}));
-    const client = {...any.simpleObject(), repos: {...any.simpleObject(), listForUser}};
+    const client = any.simpleObject();
     githubClientFactory.factory.returns(client);
     accountChooser.choose.withArgs(client).resolves(account);
-    listForUser.withArgs({username: account}).resolves({data: repos});
+    repos.listNames.withArgs(client, account).returns(repoNames);
 
     await update();
 
