@@ -33,11 +33,14 @@ suite('Listr tasks for listing the projects', () => {
       const account = any.word();
       const config = any.simpleObject();
       const task = any.simpleObject();
+      const travisConfigs = any.simpleObject();
       const getContents = sinon.stub();
       const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContents}};
       getContents.withArgs({owner: account, repo: repoName, path: '.travis.yml'}).resolves(config);
 
-      assert.equal(await fetchTravisConfigFileFactory(repoName)({octokit: client, account}, task), config);
+      await fetchTravisConfigFileFactory(repoName)({octokit: client, account, travisConfigs}, task);
+
+      assert.equal(travisConfigs[repoName], config);
       assert.equal(task.title, `Fetched .travis.yml from ${repoName}`);
     });
 

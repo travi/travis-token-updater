@@ -25,17 +25,11 @@ suite('repos to js projects filter', () => {
     const repoNames = any.listOf(any.word);
     const listrPromise = any.simpleObject();
     const run = sinon.stub();
-    run.withArgs({account, octokit: client}).returns(listrPromise);
+    run.withArgs({account, octokit: client, travisConfigs: {}}).returns(listrPromise);
     listr.default
       .withArgs([
-        {
-          title: `Determining list of repositories for ${account}`,
-          task: listRepoNames
-        },
-        {
-          title: 'Fetching Travis-CI config files for each repository',
-          task: fetchTravisConfigFiles
-        }
+        {title: `Determining list of repositories for ${account}`, task: listRepoNames},
+        {title: 'Fetching Travis-CI config files for each repository', task: fetchTravisConfigFiles}
       ])
       .returns({run});
     repos.listNames.withArgs(client, account).resolves(repoNames);

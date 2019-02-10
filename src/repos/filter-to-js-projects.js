@@ -14,5 +14,5 @@ export default function (octokit, account) {
     }
   ]);
 
-  return tasks.run({octokit, account});
+  return tasks.run({octokit, account, travisConfigs: {}});
 }

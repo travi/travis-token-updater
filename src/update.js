@@ -7,11 +7,11 @@ export default async function () {
 
   try {
     const account = await choose(octokit);
-    const {repoNames} = await listJavaScriptRepoNames(octokit, account);
+    const {repoNames, travisConfigs} = await listJavaScriptRepoNames(octokit, account);
 
-    console.log(repoNames);         // eslint-disable-line no-console
+    console.log({repoNames, travisRepos: Object.keys(travisConfigs)});          // eslint-disable-line no-console
   } catch (err) {
     process.exitCode = 1;
-    console.error(err);             // eslint-disable-line no-console
+    console.error(err);                               // eslint-disable-line no-console
   }
 }

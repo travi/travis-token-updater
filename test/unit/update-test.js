@@ -28,14 +28,16 @@ suite('update tokens', () => {
   test('that tokens get updated for the chosen account', async () => {
     const account = any.word();
     const repoNames = any.listOf(any.word);
+    const travisConfigs = any.simpleObject();
     const client = any.simpleObject();
     githubClientFactory.factory.returns(client);
     accountChooser.choose.withArgs(client).resolves(account);
-    jsRepos.default.withArgs(client, account).resolves({repoNames});
+    jsRepos.default.withArgs(client, account).resolves({repoNames, travisConfigs});
 
     await update();
 
-    assert.calledWith(console.log, repoNames);      // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    assert.calledWith(console.log, {repoNames, travisRepos: Object.keys(travisConfigs)});
   });
 
   test('that an error from choosing the account is written to stderr', async () => {
