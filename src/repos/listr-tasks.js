@@ -6,3 +6,17 @@ export async function listRepoNames(context) {
 
   context.repoNames = await listRepoNamesFor(octokit, account);
 }
+
+export function fetchTravisConfigFileFactory(repoName) {
+  return async ({octokit, account}, task) => octokit.repos.getContents({
+    owner: account,
+    repo: repoName,
+    path: '.travis.yml'
+  }).then(result => {
+    task.title = `Fetched .travis.yml from ${repoName}`;
+
+    return result;
+  }).catch(err => {
+    task.title = `Received the following error when fetching .travis.yml from ${repoName}: ${err.message}`;
+  });
+}

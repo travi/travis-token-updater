@@ -1,7 +1,9 @@
+import {zip} from 'lodash';
 import sinon from 'sinon';
 import any from '@travi/any';
 import {assert} from 'chai';
 import * as listr from '../../../third-party-wrappers/listr';
+import * as listrTaskImplementations from '../../../src/repos/listr-tasks';
 import fetchTravisConfigsFor from '../../../src/repos/fetch-travis-config-files';
 
 suite('travis config files fetcher', () => {
@@ -11,55 +13,25 @@ suite('travis config files fetcher', () => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(listr, 'default');
+    sandbox.stub(listrTaskImplementations, 'fetchTravisConfigFileFactory');
   });
 
   teardown(() => sandbox.restore());
 
   test('that the config files are fetched for each repo', () => {
-    const getContents = sinon.stub();
-    const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContents}};
-    const account = any.word();
     const repoNames = any.listOf(any.word);
+    const configFileFetchFunctions = any.listOf(() => () => undefined, {size: repoNames.length});
     const listrTasks = any.simpleObject();
-    listr.default.returns(listrTasks);
+    const repoTaskFunctions = zip(repoNames, configFileFetchFunctions);
+    const taskDefinitions = repoTaskFunctions.map(([repoName, configFileFetchFunction]) => {
+      listrTaskImplementations.fetchTravisConfigFileFactory.withArgs(repoName).returns(configFileFetchFunction);
+      return {title: `Fetching .travis.yml from ${repoName}`, task: configFileFetchFunction};
+    });
+    listr.default.withArgs(taskDefinitions, {concurrent: true}).returns(listrTasks);
 
-    const tasks = fetchTravisConfigsFor({octokit: client, account, repoNames});
+    const tasks = fetchTravisConfigsFor({repoNames});
 
     assert.calledWithNew(listr.default);
     assert.equal(tasks, listrTasks);
-
-    const callToListrConstructor = listr.default.getCall(0);
-    assert.deepEqual(callToListrConstructor.args[1], {concurrent: true});
-    repoNames.forEach(async (name, index) => {
-      const taskDefinition = callToListrConstructor.args[0][index];
-      const task = any.simpleObject();
-      const config = any.simpleObject();
-      getContents.withArgs({owner: account, repo: name, path: '.travis.yml'}).resolves(config);
-
-      assert.equal(taskDefinition.title, `Fetching .travis.yml from ${name}`);
-      assert.equal(await taskDefinition.task({octokit: client, account}, task), config);
-      assert.equal(task.title, `Fetched .travis.yml from ${name}`);
-    });
-  });
-
-  test('that failure to find the config file in a repo does not result in failure', () => {
-    const getContents = sinon.stub();
-    const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContents}};
-    const account = any.word();
-    const repoNames = any.listOf(any.word);
-
-    fetchTravisConfigsFor({octokit: client, account, repoNames});
-
-    const callToListrConstructor = listr.default.getCall(0);
-    repoNames.forEach(async (name, index) => {
-      const taskDefinition = callToListrConstructor.args[0][index];
-      const errorMessage = any.string();
-      const task = any.simpleObject();
-      getContents.rejects(new Error(errorMessage));
-
-      await taskDefinition.task({octokit: client, account}, task);
-
-      assert.equal(task.title, `Received the following error when fetching .travis.yml from ${name}: ${errorMessage}`);
-    });
   });
 });
