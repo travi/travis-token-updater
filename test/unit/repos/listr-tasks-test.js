@@ -32,11 +32,12 @@ suite('Listr tasks for listing the projects', () => {
       const repoName = any.word();
       const account = any.word();
       const config = any.simpleObject();
+      const response = {...any.simpleObject(), data: {...any.simpleObject(), content: config}};
       const task = any.simpleObject();
       const travisConfigs = any.simpleObject();
       const getContents = sinon.stub();
       const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContents}};
-      getContents.withArgs({owner: account, repo: repoName, path: '.travis.yml'}).resolves(config);
+      getContents.withArgs({owner: account, repo: repoName, path: '.travis.yml'}).resolves(response);
 
       await fetchTravisConfigFileFactory(repoName)({octokit: client, account, travisConfigs}, task);
 
