@@ -5,9 +5,10 @@ import * as listr from '../../../third-party-wrappers/listr';
 import * as repos from '../../../src/account/repos';
 import filter from '../../../src/repos/determine-js-projects';
 import fetchTravisConfigFiles from '../../../src/repos/fetch-travis-config-files';
+import filterToJsProjects from '../../../src/repos/filter-to-js-projects';
 import {listRepoNames} from '../../../src/repos/listr-tasks';
 
-suite('repos to js projects filter', () => {
+suite('js projects from repos', () => {
   let sandbox;
 
   setup(() => {
@@ -29,7 +30,8 @@ suite('repos to js projects filter', () => {
     listr.default
       .withArgs([
         {title: `Determining list of repositories for ${account}`, task: listRepoNames},
-        {title: 'Fetching Travis-CI config files for each repository', task: fetchTravisConfigFiles}
+        {title: 'Fetching Travis-CI config files for each repository', task: fetchTravisConfigFiles},
+        {title: 'Filtering to JavaScript projects', task: filterToJsProjects}
       ])
       .returns({run});
     repos.listNames.withArgs(client, account).resolves(repoNames);

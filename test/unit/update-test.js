@@ -29,15 +29,16 @@ suite('update tokens', () => {
     const account = any.word();
     const repoNames = any.listOf(any.word);
     const travisConfigs = any.simpleObject();
+    const jsProjects = any.listOf(any.word);
     const client = any.simpleObject();
     githubClientFactory.factory.returns(client);
     accountChooser.choose.withArgs(client).resolves(account);
-    jsRepos.default.withArgs(client, account).resolves({repoNames, travisConfigs});
+    jsRepos.default.withArgs(client, account).resolves({repoNames, travisConfigs, jsProjects});
 
     await update();
 
     // eslint-disable-next-line no-console
-    assert.calledWith(console.log, {repoNames, travisRepos: Object.keys(travisConfigs)});
+    assert.calledWith(console.log, {repoNames, travisRepos: Object.keys(travisConfigs), jsProjects});
   });
 
   test('that an error from choosing the account is written to stderr', async () => {
