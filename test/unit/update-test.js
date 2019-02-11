@@ -3,7 +3,7 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import * as githubClientFactory from '../../src/github-client-factory';
 import * as accountChooser from '../../src/account/choose';
-import * as jsRepos from '../../src/repos/filter-to-js-projects';
+import * as jsRepos from '../../src/repos/determine-js-projects';
 import {update} from '../../src';
 
 suite('update tokens', () => {

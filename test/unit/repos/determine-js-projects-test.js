@@ -3,7 +3,7 @@ import any from '@travi/any';
 import sinon from 'sinon';
 import * as listr from '../../../third-party-wrappers/listr';
 import * as repos from '../../../src/account/repos';
-import filter from '../../../src/repos/filter-to-js-projects';
+import filter from '../../../src/repos/determine-js-projects';
 import fetchTravisConfigFiles from '../../../src/repos/fetch-travis-config-files';
 import {listRepoNames} from '../../../src/repos/listr-tasks';
 

@@ -1,6 +1,6 @@
 import {factory as generateClient} from './github-client-factory';
 import {choose} from './account';
-import listJavaScriptRepoNames from './repos/filter-to-js-projects';
+import listJavaScriptRepoNames from './repos/determine-js-projects';
 
 export default async function () {
   const octokit = generateClient();
