@@ -9,7 +9,7 @@ export async function chooseAccount(context) {
   const [organizations, userDetails] = await Promise.all([getOrganizations(octokit), getUserDetails(octokit)]);
   const user = userDetails.login;
 
-  return new Promise(resolve => prompt(
+  return prompt(
     [
       {
         name: 'userOrOrg',
@@ -27,8 +27,6 @@ export async function chooseAccount(context) {
     ],
     answers => {
       context.account = user === answers.userOrOrg ? answers.userOrOrg : answers.organization;
-
-      resolve();
     }
-  ));
+  );
 }
