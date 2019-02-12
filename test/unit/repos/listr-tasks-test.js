@@ -6,7 +6,7 @@ import * as repos from '../../../src/account/repos';
 import * as languageResolver from '../../../src/repos/determine-language-from-config';
 import {determineJsProjects, fetchTravisConfigFileFactory, listRepoNames} from '../../../src/repos/listr-tasks';
 
-suite('Listr tasks for listing the projects', () => {
+suite('Listr tasks for repositories', () => {
   let sandbox;
 
   setup(() => {

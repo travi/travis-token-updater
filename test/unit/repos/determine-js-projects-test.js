@@ -23,21 +23,17 @@ suite('js projects from repos', () => {
     const client = any.simpleObject();
     const account = any.word();
     const repoNames = any.listOf(any.word);
-    const listrPromise = any.simpleObject();
-    const run = sinon.stub();
-    run.withArgs({account, octokit: client, travisConfigs: {}}).returns(listrPromise);
+    const tasks = any.simpleObject();
     listr.default
       .withArgs([
         {title: `Determining list of repositories for ${account}`, task: listRepoNames},
         {title: 'Fetching Travis-CI config files for each repository', task: fetchTravisConfigFiles},
         {title: 'Filtering to JavaScript projects', task: determineJsProjects}
       ])
-      .returns({run});
+      .returns(tasks);
     repos.listNames.withArgs(client, account).resolves(repoNames);
 
-    const promise = filter(client, account);
-
+    assert.equal(filter({octokit: client, account}), tasks);
     assert.calledWithNew(listr.default);
-    assert.equal(promise, listrPromise);
   });
 });
