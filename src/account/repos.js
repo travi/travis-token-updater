@@ -6,9 +6,9 @@ async function accountTypeIsUser(account, octokit) {
 
 export async function listNames(octokit, account) {
   const options = await accountTypeIsUser(account, octokit)
-    ? octokit.repos.list.endpoint.merge({})
+    ? octokit.repos.list.endpoint.merge({affiliation: 'owner'})
     : octokit.repos.listForOrg.endpoint.merge({org: account});
   const repos = await octokit.paginate(options);
 
-  return repos.data.map(repo => repo.name);
+  return repos.map(repo => repo.name);
 }

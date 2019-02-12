@@ -24,8 +24,8 @@ suite('account repos', () => {
     const paginate = sinon.stub();
     const client = {...any.simpleObject(), paginate, repos: {...any.simpleObject(), list: {endpoint: {merge}}}};
     userFetcher.getDetails.withArgs(client).resolves({login: account});
-    merge.withArgs({}).returns(requestOptions);
-    paginate.withArgs(requestOptions).resolves({data: repos});
+    merge.withArgs({affiliation: 'owner'}).returns(requestOptions);
+    paginate.withArgs(requestOptions).resolves(repos);
 
     assert.deepEqual(await listNames(client, account), repoNames);
   });
@@ -36,7 +36,7 @@ suite('account repos', () => {
     const client = {...any.simpleObject(), paginate, repos: {...any.simpleObject(), listForOrg: {endpoint: {merge}}}};
     userFetcher.getDetails.withArgs(client).resolves({login: any.word()});
     merge.withArgs({org: account}).returns(requestOptions);
-    paginate.withArgs(requestOptions).resolves({data: repos});
+    paginate.withArgs(requestOptions).resolves(repos);
 
     assert.deepEqual(await listNames(client, account), repoNames);
   });
