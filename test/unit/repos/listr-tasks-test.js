@@ -51,7 +51,8 @@ suite('Listr tasks for listing the projects', () => {
     test('that failure to find the file does not result in failure', async () => {
       const repoName = any.word();
       const account = any.word();
-      const task = any.simpleObject();
+      const skip = sinon.stub();
+      const task = {...any.simpleObject(), skip};
       const errorMessage = any.string();
       const getContents = sinon.stub();
       const client = {...any.simpleObject(), repos: {...any.simpleObject(), getContents}};
@@ -59,8 +60,8 @@ suite('Listr tasks for listing the projects', () => {
 
       await fetchTravisConfigFileFactory(repoName)({octokit: client, account}, task);
 
-      assert.equal(
-        task.title,
+      assert.calledWith(
+        skip,
         `Received the following error when fetching .travis.yml from ${repoName}: ${errorMessage}`
       );
     });

@@ -17,9 +17,9 @@ export function fetchTravisConfigFileFactory(repoName) {
     task.title = `Fetched .travis.yml from ${repoName}`;
 
     travisConfigs[repoName] = result.data.content;
-  }).catch(err => {
-    task.title = `Received the following error when fetching .travis.yml from ${repoName}: ${err.message}`;
-  });
+  }).catch(err => task.skip(
+    `Received the following error when fetching .travis.yml from ${repoName}: ${err.message}`
+  ));
 }
 
 export function determineJsProjects(context) {
