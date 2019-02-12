@@ -38,7 +38,7 @@ suite('update tokens', () => {
     await update();
 
     // eslint-disable-next-line no-console
-    assert.calledWith(console.log, {repoNames, travisRepos: Object.keys(travisConfigs), jsProjects});
+    assert.calledWith(console.log, {jsProjects});
   });
 
   test('that an error from choosing the account is written to stderr', async () => {
