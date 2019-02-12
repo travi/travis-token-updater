@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: off */
 import {listNames as listRepoNamesFor} from '../account/repos';
+import determineLanguageFrom from './determine-language-from-config';
 
 export async function listRepoNames(context) {
   const {octokit, account} = context;
@@ -19,4 +20,10 @@ export function fetchTravisConfigFileFactory(repoName) {
   }).catch(err => {
     task.title = `Received the following error when fetching .travis.yml from ${repoName}: ${err.message}`;
   });
+}
+
+export function determineJsProjects(context) {
+  context.jsProjects = Object.entries(context.travisConfigs)
+    .map(([repoName, config]) => 'node_js' === determineLanguageFrom(config) && repoName)
+    .filter(Boolean);
 }

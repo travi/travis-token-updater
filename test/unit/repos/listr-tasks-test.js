@@ -1,8 +1,10 @@
 import {assert} from 'chai';
 import any from '@travi/any';
 import sinon from 'sinon';
+import {zip} from 'lodash';
 import * as repos from '../../../src/account/repos';
-import {listRepoNames, fetchTravisConfigFileFactory} from '../../../src/repos/listr-tasks';
+import * as languageResolver from '../../../src/repos/determine-language-from-config';
+import {determineJsProjects, fetchTravisConfigFileFactory, listRepoNames} from '../../../src/repos/listr-tasks';
 
 suite('Listr tasks for listing the projects', () => {
   let sandbox;
@@ -11,6 +13,7 @@ suite('Listr tasks for listing the projects', () => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(repos, 'listNames');
+    sandbox.stub(languageResolver, 'default');
   });
 
   teardown(() => sandbox.restore());
@@ -61,5 +64,23 @@ suite('Listr tasks for listing the projects', () => {
         `Received the following error when fetching .travis.yml from ${repoName}: ${errorMessage}`
       );
     });
+  });
+
+  test('that only js-projects are included jsRepos in the context', () => {
+    const repoNames = any.listOf(any.word);
+    const jsRepos = any.listOf(any.boolean, {size: repoNames.length});
+    const travisConfigs = any.objectWithKeys(repoNames, {factory: any.simpleObject});
+    const reposWithJsDetails = zip(repoNames, jsRepos);
+    reposWithJsDetails.forEach(([repo, isJsRepo]) => {
+      languageResolver.default.withArgs(travisConfigs[repo]).returns(isJsRepo ? 'node_js' : any.word());
+    });
+    const context = {...any.simpleObject(), travisConfigs};
+
+    determineJsProjects(context);
+
+    assert.deepEqual(
+      context.jsProjects,
+      reposWithJsDetails.map(([repo, isJsRepo]) => isJsRepo && repo).filter(Boolean)
+    );
   });
 });
