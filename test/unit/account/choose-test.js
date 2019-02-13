@@ -1,13 +1,13 @@
+import inquirer from 'inquirer';
 import sinon from 'sinon';
 import {assert} from 'chai';
 import any from '@travi/any';
-import * as listInquirer from '../../third-party-wrappers/listr-inquirer';
-import {chooseAccount} from '../../src/listr-tasks';
-import * as userFetcher from '../../src/account/user';
-import * as orgFetcher from '../../src/account/organizations';
-import {organizationChooserShouldBePresented} from '../../src/account/prompt-predicates';
+import * as userFetcher from '../../../src/account/user';
+import * as orgFetcher from '../../../src/account/organizations';
+import {organizationChooserShouldBePresented} from '../../../src/account/prompt-predicates';
+import {choose} from '../../../src/account/choose';
 
-suite('coordination Listr tasks', () => {
+suite('account chooser', () => {
   let sandbox;
   const octokit = any.simpleObject();
   const user = any.word();
@@ -34,7 +34,7 @@ suite('coordination Listr tasks', () => {
 
     sandbox.stub(userFetcher, 'getDetails');
     sandbox.stub(orgFetcher, 'getList');
-    sandbox.stub(listInquirer, 'default');
+    sandbox.stub(inquirer, 'prompt');
 
     userFetcher.getDetails.withArgs(octokit).resolves({login: user});
     orgFetcher.getList.withArgs(octokit).resolves(organizations);
@@ -43,21 +43,15 @@ suite('coordination Listr tasks', () => {
   teardown(() => sandbox.restore());
 
   test('that the user account is returned, if chosen', async () => {
-    const context = {...any.simpleObject(), octokit};
-    listInquirer.default.withArgs(questions).yields({userOrOrg: user});
+    inquirer.prompt.withArgs(questions).resolves({userOrOrg: user});
 
-    await chooseAccount(context);
-
-    assert.equal(context.account, user);
+    assert.equal(await choose(octokit), user);
   });
 
   test('that the organization is returned, if chosen', async () => {
     const organization = any.word();
-    const context = {...any.simpleObject(), octokit};
-    listInquirer.default.withArgs(questions).yields({userOrOrg: 'organization', organization});
+    inquirer.prompt.withArgs(questions).resolves({userOrOrg: 'organization', organization});
 
-    await chooseAccount(context);
-
-    assert.equal(context.account, organization);
+    assert.equal(await choose(octokit), organization);
   });
 });

@@ -1,10 +1,9 @@
 import sinon from 'sinon';
 import any from '@travi/any';
 import {assert} from 'chai';
-import * as listr from '../../third-party-wrappers/listr';
 import * as githubClientFactory from '../../src/github-client-factory';
-import listJavaScriptRepoNames from '../../src/repos/determine-js-projects';
-import {chooseAccount} from '../../src/listr-tasks';
+import * as accountChooser from '../../src/account/choose';
+import * as jsRepos from '../../src/repos/determine-js-projects';
 import {update} from '../../src';
 
 suite('update tokens', () => {
@@ -14,8 +13,9 @@ suite('update tokens', () => {
   setup(() => {
     sandbox = sinon.createSandbox();
 
-    sandbox.stub(listr, 'default');
     sandbox.stub(githubClientFactory, 'factory');
+    sandbox.stub(accountChooser, 'choose');
+    sandbox.stub(jsRepos, 'default');
     sandbox.stub(console, 'log');
     sandbox.stub(console, 'error');
   });
@@ -26,32 +26,37 @@ suite('update tokens', () => {
   });
 
   test('that tokens get updated for the chosen account', async () => {
+    const account = any.word();
+    const repoNames = any.listOf(any.word);
+    const travisConfigs = any.simpleObject();
     const jsProjects = any.listOf(any.word);
     const client = any.simpleObject();
-    const run = sinon.stub();
-    run.withArgs({octokit: client, travisConfigs: {}}).resolves({jsProjects});
     githubClientFactory.factory.returns(client);
-    listr.default
-      .withArgs([
-        {title: 'Determining account', task: chooseAccount},
-        {title: 'Finding JavaScript Projects', task: listJavaScriptRepoNames}
-      ])
-      .returns({run});
+    accountChooser.choose.withArgs(client).resolves(account);
+    jsRepos.default.withArgs(client, account).resolves({repoNames, travisConfigs, jsProjects});
 
     await update();
 
-    assert.calledWithNew(listr.default);
-    assert.calledWith(console.log, {jsProjects});   // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    assert.calledWith(console.log, {jsProjects});
   });
 
-  test('that errors are written to stderr', async () => {
-    const run = sinon.stub();
-    listr.default.returns({run});
-    run.rejects(error);
+  test('that an error from choosing the account is written to stderr', async () => {
+    accountChooser.choose.rejects(error);
 
     await update();
 
-    assert.calledWith(console.error, error);        // eslint-disable-line no-console
+    assert.calledWith(console.error, error);      // eslint-disable-line no-console
+    assert.equal(process.exitCode, 1);
+  });
+
+  test('that an error from listing the js projects is written to stderr', async () => {
+    accountChooser.choose.resolves(any.simpleObject());
+    jsRepos.default.rejects(error);
+
+    await update();
+
+    assert.calledWith(console.error, error);      // eslint-disable-line no-console
     assert.equal(process.exitCode, 1);
   });
 });
