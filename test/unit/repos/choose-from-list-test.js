@@ -25,7 +25,7 @@ suite('choose repositories from list', () => {
         name: 'repos',
         message: 'Which repositories should have the token updated?'
       }])
-      .resolves(chosenRepos);
+      .resolves({repos: chosenRepos});
 
     assert.equal(await chooseFromList(repos), chosenRepos);
   });
