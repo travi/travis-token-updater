@@ -5,10 +5,10 @@ import {getDetails} from '../../../src/account/user';
 
 suite('fetch current user', () => {
   test('that user details are fetched for the authenticated session', async () => {
-    const get = sinon.stub();
+    const getAuthenticated = sinon.stub();
     const user = any.simpleObject();
-    get.resolves({data: user});
+    getAuthenticated.resolves({data: user});
 
-    assert.equal(await getDetails({users: {get}}), user);
+    assert.equal(await getDetails({users: {getAuthenticated}}), user);
   });
 });

@@ -5,10 +5,10 @@ import {getList} from '../../../src/account/organizations';
 
 suite('fetch organizations', () => {
   test('that the list of orgs is fetched for the authenticated session', async () => {
-    const getOrgs = sinon.stub();
+    const listForAuthenticatedUser = sinon.stub();
     const organizations = any.listOf(any.simpleObject);
-    getOrgs.resolves({data: organizations});
+    listForAuthenticatedUser.resolves({data: organizations});
 
-    assert.equal(await getList({users: {getOrgs}}), organizations);
+    assert.equal(await getList({orgs: {listForAuthenticatedUser}}), organizations);
   });
 });

@@ -1,5 +1,5 @@
 export async function getList(octokit) {
-  const organizations = await octokit.users.getOrgs();
+  const organizations = await octokit.orgs.listForAuthenticatedUser();
 
   return organizations.data;
 }
