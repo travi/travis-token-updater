@@ -5,6 +5,7 @@ import * as githubClientFactory from '../../src/github-client-factory';
 import * as accountChooser from '../../src/account/choose';
 import * as jsRepos from '../../src/repos/determine-js-projects';
 import * as chooseReposFromList from '../../src/repos/choose-from-list';
+import * as tokenSetter from '../../src/repos/set-token';
 import {update} from '../../src';
 
 suite('update tokens', () => {
@@ -18,6 +19,7 @@ suite('update tokens', () => {
     sandbox.stub(accountChooser, 'choose');
     sandbox.stub(jsRepos, 'default');
     sandbox.stub(chooseReposFromList, 'default');
+    sandbox.stub(tokenSetter, 'default');
     sandbox.stub(console, 'log');
     sandbox.stub(console, 'error');
   });
@@ -41,8 +43,7 @@ suite('update tokens', () => {
 
     await update();
 
-    // eslint-disable-next-line no-console
-    assert.calledWith(console.log, {chosenRepos});
+    assert.calledWith(tokenSetter.default, chosenRepos, account);
   });
 
   test('that an error from choosing the account is written to stderr', async () => {

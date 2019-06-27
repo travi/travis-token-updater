@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^16.15.0",
+    "execa": "^2.0.1",
     "inquirer": "^6.2.2",
     "js-yaml": "^3.12.1",
     "listr": "^0.14.3",
