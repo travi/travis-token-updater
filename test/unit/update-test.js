@@ -46,6 +46,23 @@ suite('update tokens', () => {
     assert.calledWith(tokenSetter.default, chosenRepos, account);
   });
 
+  test('that account choice step when explicitly defined', async () => {
+    const githubAccount = any.word();
+    const repoNames = any.listOf(any.word);
+    const travisConfigs = any.simpleObject();
+    const jsProjects = any.listOf(any.word);
+    const chosenRepos = any.listOf(any.word);
+    const client = any.simpleObject();
+    githubClientFactory.factory.returns(client);
+    jsRepos.default.withArgs(client, githubAccount).resolves({repoNames, travisConfigs, jsProjects});
+    chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepos);
+
+    await update({githubAccount});
+
+    assert.notCalled(accountChooser.choose);
+    assert.calledWith(tokenSetter.default, chosenRepos, githubAccount);
+  });
+
   test('that an error from choosing the account is written to stderr', async () => {
     accountChooser.choose.rejects(error);
 

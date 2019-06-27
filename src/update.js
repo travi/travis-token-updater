@@ -4,11 +4,11 @@ import listJavaScriptRepoNames from './repos/determine-js-projects';
 import chooseReposFromList from './repos/choose-from-list';
 import setToken from './repos/set-token';
 
-export default async function () {
+export default async function ({githubAccount} = {}) {
   const octokit = generateClient();
 
   try {
-    const account = await choose(octokit);
+    const account = githubAccount || await choose(octokit);
     const {jsProjects} = await listJavaScriptRepoNames(octokit, account);
     const chosenRepos = await chooseReposFromList(jsProjects);
 
