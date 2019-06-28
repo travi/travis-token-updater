@@ -10,5 +10,7 @@ export async function listNames(octokit, account) {
     : octokit.repos.listForOrg.endpoint.merge({org: account});
   const repos = await octokit.paginate(options);
 
-  return repos.map(repo => repo.name);
+  return repos
+    .filter(repo => !repo.archived)
+    .map(repo => repo.name);
 }

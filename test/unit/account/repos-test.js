@@ -7,8 +7,8 @@ import * as userFetcher from '../../../src/account/user';
 suite('account repos', () => {
   let sandbox;
   const account = any.word();
-  const repoNames = any.listOf(any.string);
-  const repos = repoNames.map(name => ({...any.simpleObject(), name}));
+  const repos = any.listOf(() => ({...any.simpleObject(), name: any.word(), archived: any.boolean()}));
+  const nonArchivedRepoNames = repos.filter(repo => !repo.archived).map(repo => repo.name);
   const requestOptions = any.simpleObject();
 
   setup(() => {
@@ -27,7 +27,7 @@ suite('account repos', () => {
     merge.withArgs({affiliation: 'owner'}).returns(requestOptions);
     paginate.withArgs(requestOptions).resolves(repos);
 
-    assert.deepEqual(await listNames(client, account), repoNames);
+    assert.deepEqual(await listNames(client, account), nonArchivedRepoNames);
   });
 
   test('that the repo names for the user account are listed', async () => {
@@ -38,6 +38,6 @@ suite('account repos', () => {
     merge.withArgs({org: account}).returns(requestOptions);
     paginate.withArgs(requestOptions).resolves(repos);
 
-    assert.deepEqual(await listNames(client, account), repoNames);
+    assert.deepEqual(await listNames(client, account), nonArchivedRepoNames);
   });
 });
