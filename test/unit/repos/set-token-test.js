@@ -6,6 +6,7 @@ import {zip} from 'lodash';
 import * as listr from '../../../third-party-wrappers/listr';
 import * as listrTaskImplementations from '../../../src/repos/listr-tasks';
 import setToken from '../../../src/repos/set-token';
+import {requireTokenValue} from '../../../src/prompt-validations';
 
 suite('set token', () => {
   let sandbox;
@@ -46,7 +47,8 @@ suite('set token', () => {
         {
           type: 'password',
           name: 'tokenValue',
-          message: 'What is the token value?'
+          message: 'What is the token value?',
+          validate: requireTokenValue
         }
       ])
       .resolves({tokenName, tokenValue});

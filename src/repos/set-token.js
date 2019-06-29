@@ -1,5 +1,6 @@
 import {prompt} from 'inquirer';
 import Listr from '../../third-party-wrappers/listr';
+import {requireTokenValue} from '../prompt-validations';
 import {setToken} from './listr-tasks';
 
 export default async function (repos, account) {
@@ -13,7 +14,8 @@ export default async function (repos, account) {
     {
       type: 'password',
       name: 'tokenValue',
-      message: 'What is the token value?'
+      message: 'What is the token value?',
+      validate: requireTokenValue
     }
   ]);
 
