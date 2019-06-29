@@ -5,8 +5,9 @@ import {setToken} from './listr-tasks';
 export default async function (repos, account) {
   const {tokenName, tokenValue} = await prompt([
     {
-      type: 'input',
+      type: 'list',
       name: 'tokenName',
+      choices: ['NPM_TOKEN', 'GH_TOKEN'],
       message: 'What is the token that should be updated?'
     },
     {

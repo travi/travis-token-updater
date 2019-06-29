@@ -38,8 +38,9 @@ suite('set token', () => {
     inquirer.prompt
       .withArgs([
         {
-          type: 'input',
+          type: 'list',
           name: 'tokenName',
+          choices: ['NPM_TOKEN', 'GH_TOKEN'],
           message: 'What is the token that should be updated?'
         },
         {
