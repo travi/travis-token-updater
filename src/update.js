@@ -3,9 +3,10 @@ import {choose} from './account';
 import listJavaScriptRepoNames from './repos/determine-js-projects';
 import chooseReposFromList from './repos/choose-from-list';
 import setToken from './repos/set-token';
+import netrc from '../third-party-wrappers/netrc';
 
 export default async function ({githubAccount} = {}) {
-  const octokit = generateClient();
+  const octokit = generateClient(netrc()['github.com'].login);
 
   try {
     const account = githubAccount || await choose(octokit);
