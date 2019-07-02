@@ -1,6 +1,7 @@
 import sinon from 'sinon';
 import any from '@travi/any';
 import {assert} from 'chai';
+import * as netrc from '../../third-party-wrappers/netrc';
 import * as githubClientFactory from '../../src/github-client-factory';
 import * as accountChooser from '../../src/account/choose';
 import * as jsRepos from '../../src/repos/determine-js-projects';
@@ -11,6 +12,8 @@ import {update} from '../../src';
 suite('update tokens', () => {
   let sandbox;
   const error = new Error(any.simpleObject());
+  const client = any.simpleObject();
+  const githubAccessToken = any.string();
 
   setup(() => {
     sandbox = sinon.createSandbox();
@@ -22,6 +25,10 @@ suite('update tokens', () => {
     sandbox.stub(tokenSetter, 'default');
     sandbox.stub(console, 'log');
     sandbox.stub(console, 'error');
+    sandbox.stub(netrc, 'default');
+
+    netrc.default.returns({'github.com': {login: githubAccessToken}});
+    githubClientFactory.factory.withArgs(githubAccessToken).returns(client);
   });
 
   teardown(() => {
@@ -35,8 +42,6 @@ suite('update tokens', () => {
     const travisConfigs = any.simpleObject();
     const jsProjects = any.listOf(any.word);
     const chosenRepos = any.listOf(any.word);
-    const client = any.simpleObject();
-    githubClientFactory.factory.returns(client);
     accountChooser.choose.withArgs(client).resolves(account);
     jsRepos.default.withArgs(client, account).resolves({repoNames, travisConfigs, jsProjects});
     chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepos);
@@ -52,8 +57,6 @@ suite('update tokens', () => {
     const travisConfigs = any.simpleObject();
     const jsProjects = any.listOf(any.word);
     const chosenRepos = any.listOf(any.word);
-    const client = any.simpleObject();
-    githubClientFactory.factory.returns(client);
     jsRepos.default.withArgs(client, githubAccount).resolves({repoNames, travisConfigs, jsProjects});
     chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepos);
 

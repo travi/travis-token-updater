@@ -1,7 +1,6 @@
 import sinon from 'sinon';
 import {assert} from 'chai';
 import any from '@travi/any';
-import * as netrc from '../../third-party-wrappers/netrc';
 import * as octokit from '../../third-party-wrappers/octokit';
 import {factory} from '../../src/github-client-factory';
 
@@ -12,7 +11,6 @@ suite('github client factory', () => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(octokit, 'default');
-    sandbox.stub(netrc, 'default');
   });
 
   teardown(() => sandbox.restore());
@@ -21,10 +19,9 @@ suite('github client factory', () => {
     const token = any.string();
     const authenticate = sinon.spy();
     const instance = {authenticate};
-    netrc.default.returns({'github.com': {login: token}});
     octokit.default.withArgs({auth: `token ${token}`}).returns(instance);
 
-    assert.equal(factory(), instance);
+    assert.equal(factory(token), instance);
     assert.calledWithNew(octokit.default);
   });
 });
