@@ -12,5 +12,6 @@ export async function listNames(octokit, account) {
 
   return repos
     .filter(repo => !repo.archived)
+    .filter(repo => !repo.fork)
     .map(repo => repo.name);
 }
