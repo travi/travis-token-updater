@@ -2,11 +2,11 @@ import sinon from 'sinon';
 import any from '@travi/any';
 import {assert} from 'chai';
 import * as netrc from '../../third-party-wrappers/netrc';
-import * as githubClientFactory from '../../src/github-client-factory';
+import * as githubClientFactory from '../../src/github/client-factory';
 import * as accountChooser from '../../src/account/choose';
-import * as jsRepos from '../../src/repos/determine-js-projects';
-import * as chooseReposFromList from '../../src/repos/choose-from-list';
-import * as tokenSetter from '../../src/repos/set-token';
+import * as jsRepos from '../../src/github/determine-js-projects';
+import * as chooseReposFromList from '../../src/github/choose-from-list';
+import * as tokenSetter from '../../src/github/set-token';
 import {update} from '../../src';
 
 suite('update tokens', () => {

@@ -2,7 +2,7 @@ import inquirer from 'inquirer';
 import sinon from 'sinon';
 import {assert} from 'chai';
 import any from '@travi/any';
-import chooseFromList from '../../../src/repos/choose-from-list';
+import chooseFromList from '../../../src/github/choose-from-list';
 
 suite('choose repositories from list', () => {
   let sandbox;

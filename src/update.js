@@ -1,8 +1,8 @@
-import {factory as generateClient} from './github-client-factory';
+import {factory as generateClient} from './github/client-factory';
 import {choose} from './account';
-import listJavaScriptRepoNames from './repos/determine-js-projects';
-import chooseReposFromList from './repos/choose-from-list';
-import setToken from './repos/set-token';
+import listJavaScriptRepoNames from './github/determine-js-projects';
+import chooseReposFromList from './github/choose-from-list';
+import setToken from './github/set-token';
 import netrc from '../third-party-wrappers/netrc';
 
 export default async function ({githubAccount} = {}) {

@@ -1,8 +1,8 @@
 import sinon from 'sinon';
 import {assert} from 'chai';
 import any from '@travi/any';
-import * as octokit from '../../third-party-wrappers/octokit';
-import {factory} from '../../src/github-client-factory';
+import * as octokit from '../../../third-party-wrappers/octokit';
+import {factory} from '../../../src/github/client-factory';
 
 suite('github client factory', () => {
   let sandbox;

@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import any from '@travi/any';
 import {assert} from 'chai';
 import * as listr from '../../../third-party-wrappers/listr';
-import * as listrTaskImplementations from '../../../src/repos/listr-tasks';
-import fetchTravisConfigsFor from '../../../src/repos/fetch-travis-config-files';
+import * as listrTaskImplementations from '../../../src/github/listr-tasks';
+import fetchTravisConfigsFor from '../../../src/github/fetch-travis-config-files';
 
 suite('travis config files fetcher', () => {
   let sandbox;

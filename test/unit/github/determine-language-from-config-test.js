@@ -2,7 +2,7 @@ import jsYaml from 'js-yaml';
 import {assert} from 'chai';
 import sinon from 'sinon';
 import any from '@travi/any';
-import determineLanguage from '../../../src/repos/determine-language-from-config';
+import determineLanguage from '../../../src/github/determine-language-from-config';
 
 suite('determine language from Travis-CI config', () => {
   let sandbox;
