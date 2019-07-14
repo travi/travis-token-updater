@@ -7,18 +7,22 @@ import * as accountChooser from '../../src/account/choose';
 import * as jsRepos from '../../src/github/determine-js-projects';
 import * as chooseReposFromList from '../../src/github/choose-from-list';
 import * as tokenSetter from '../../src/github/set-token';
+import * as travisClientFactory from '../../src/travis-ci/client-factory';
 import {update} from '../../src';
 
 suite('update tokens', () => {
   let sandbox;
   const error = new Error(any.simpleObject());
-  const client = any.simpleObject();
   const githubAccessToken = any.string();
+  const githubClient = any.simpleObject();
+  const travisClient = any.simpleObject();
+  const proTravisClient = any.simpleObject();
 
   setup(() => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(githubClientFactory, 'factory');
+    sandbox.stub(travisClientFactory, 'default');
     sandbox.stub(accountChooser, 'choose');
     sandbox.stub(jsRepos, 'default');
     sandbox.stub(chooseReposFromList, 'default');
@@ -28,7 +32,9 @@ suite('update tokens', () => {
     sandbox.stub(netrc, 'default');
 
     netrc.default.returns({'github.com': {login: githubAccessToken}});
-    githubClientFactory.factory.withArgs(githubAccessToken).returns(client);
+    githubClientFactory.factory.withArgs(githubAccessToken).returns(githubClient);
+    travisClientFactory.default.withArgs(githubAccessToken).resolves(travisClient);
+    travisClientFactory.default.withArgs(githubAccessToken, true).resolves(proTravisClient);
   });
 
   teardown(() => {
@@ -42,13 +48,13 @@ suite('update tokens', () => {
     const travisConfigs = any.simpleObject();
     const jsProjects = any.listOf(any.word);
     const chosenRepos = any.listOf(any.word);
-    accountChooser.choose.withArgs(client).resolves(account);
-    jsRepos.default.withArgs(client, account).resolves({repoNames, travisConfigs, jsProjects});
+    accountChooser.choose.withArgs(githubClient).resolves(account);
+    jsRepos.default.withArgs(githubClient, account).resolves({repoNames, travisConfigs, jsProjects});
     chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepos);
 
     await update();
 
-    assert.calledWith(tokenSetter.default, chosenRepos, account);
+    assert.calledWith(tokenSetter.default, chosenRepos, account, travisClient, proTravisClient);
   });
 
   test('that account choice step when explicitly defined', async () => {
@@ -57,13 +63,13 @@ suite('update tokens', () => {
     const travisConfigs = any.simpleObject();
     const jsProjects = any.listOf(any.word);
     const chosenRepos = any.listOf(any.word);
-    jsRepos.default.withArgs(client, githubAccount).resolves({repoNames, travisConfigs, jsProjects});
+    jsRepos.default.withArgs(githubClient, githubAccount).resolves({repoNames, travisConfigs, jsProjects});
     chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepos);
 
     await update({githubAccount});
 
     assert.notCalled(accountChooser.choose);
-    assert.calledWith(tokenSetter.default, chosenRepos, githubAccount);
+    assert.calledWith(tokenSetter.default, chosenRepos, githubAccount, travisClient, proTravisClient);
   });
 
   test('that an error from choosing the account is written to stderr', async () => {
