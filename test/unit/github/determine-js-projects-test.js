@@ -3,11 +3,11 @@ import any from '@travi/any';
 import sinon from 'sinon';
 import * as listr from '../../../third-party-wrappers/listr';
 import * as repos from '../../../src/account/repos';
-import filter from '../../../src/repos/determine-js-projects';
-import fetchTravisConfigFiles from '../../../src/repos/fetch-travis-config-files';
-import {determineJsProjects, listRepoNames} from '../../../src/repos/listr-tasks';
+import filter from '../../../src/github/determine-js-projects';
+import fetchTravisConfigFiles from '../../../src/github/fetch-travis-config-files';
+import {determineJsProjects, listRepoNames} from '../../../src/github/listr-tasks';
 
-suite('js projects from repos', () => {
+suite('js projects from github', () => {
   let sandbox;
 
   setup(() => {

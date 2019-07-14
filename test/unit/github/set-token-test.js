@@ -4,8 +4,8 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import {zip} from 'lodash';
 import * as listr from '../../../third-party-wrappers/listr';
-import * as listrTaskImplementations from '../../../src/repos/listr-tasks';
-import setToken from '../../../src/repos/set-token';
+import * as listrTaskImplementations from '../../../src/github/listr-tasks';
+import setToken from '../../../src/github/set-token';
 import {requireTokenValue} from '../../../src/prompt-validations';
 
 suite('set token', () => {

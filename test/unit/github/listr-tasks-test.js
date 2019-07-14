@@ -4,13 +4,13 @@ import sinon from 'sinon';
 import {zip} from 'lodash';
 import * as execa from '../../../third-party-wrappers/execa';
 import * as repos from '../../../src/account/repos';
-import * as languageResolver from '../../../src/repos/determine-language-from-config';
+import * as languageResolver from '../../../src/github/determine-language-from-config';
 import {
   determineJsProjects,
   fetchTravisConfigFileFactory,
   listRepoNames,
   setToken
-} from '../../../src/repos/listr-tasks';
+} from '../../../src/github/listr-tasks';
 
 suite('Listr tasks for listing the projects', () => {
   let sandbox;
