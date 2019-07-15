@@ -5,14 +5,9 @@ import {zip} from 'lodash';
 import * as execa from '../../../third-party-wrappers/execa';
 import * as repos from '../../../src/account/repos';
 import * as languageResolver from '../../../src/github/determine-language-from-config';
-import {
-  determineJsProjects,
-  fetchTravisConfigFileFactory,
-  listRepoNames,
-  setToken
-} from '../../../src/github/listr-tasks';
+import {determineJsProjects, fetchTravisConfigFileFactory, listRepoNames} from '../../../src/github/listr-tasks';
 
-suite('Listr tasks for listing the projects', () => {
+suite('github listr tasks', () => {
   let sandbox;
 
   setup(() => {
@@ -70,41 +65,6 @@ suite('Listr tasks for listing the projects', () => {
       assert.calledWith(
         skip,
         `Received the following error when fetching .travis.yml from ${repoName}: ${errorMessage}`
-      );
-    });
-  });
-
-  suite('Travis CI set env', () => {
-    const repoName = any.word();
-    const account = any.word();
-    const tokenName = any.word();
-    const tokenValue = any.string();
-
-    test('that the environment variable is set', async () => {
-      const task = any.simpleObject();
-      execa.default.resolves();
-
-      await setToken(tokenName, tokenValue, account, repoName)({}, task);
-
-      assert.equal(task.title, `Set ${tokenName} for ${account}/${repoName}`);
-      assert.calledWith(
-        execa.default,
-        'travis',
-        ['env', 'set', tokenName, tokenValue, '--repo', `${account}/${repoName}`]
-      );
-    });
-
-    test('that failure to find the file does not result in failure', async () => {
-      const skip = sinon.stub();
-      const task = {...any.simpleObject(), skip};
-      const errorMessage = any.string();
-      execa.default.rejects(new Error(errorMessage));
-
-      await setToken(tokenName, tokenValue, account, repoName)({}, task);
-
-      assert.calledWith(
-        skip,
-        `Received the following error when attempting to set ${tokenName} for ${repoName}: ${errorMessage}`
       );
     });
   });

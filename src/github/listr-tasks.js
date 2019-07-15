@@ -1,5 +1,4 @@
 /* eslint no-param-reassign: off */
-import execa from '../../third-party-wrappers/execa';
 import {listNames as listRepoNamesFor} from '../account/repos';
 import determineLanguageFrom from './determine-language-from-config';
 
@@ -27,14 +26,4 @@ export function determineJsProjects(context) {
   context.jsProjects = Object.entries(context.travisConfigs)
     .map(([repoName, config]) => 'node_js' === determineLanguageFrom(config) && repoName)
     .filter(Boolean);
-}
-
-export function setToken(tokenName, tokenValue, account, repoName) {
-  return async (_, task) => execa('travis', ['env', 'set', tokenName, tokenValue, '--repo', `${account}/${repoName}`])
-    .then(() => {
-      task.title = `Set ${tokenName} for ${account}/${repoName}`;
-    })
-    .catch(err => task.skip(
-      `Received the following error when attempting to set ${tokenName} for ${repoName}: ${err.message}`
-    ));
 }

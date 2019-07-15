@@ -4,7 +4,7 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import {zip} from 'lodash';
 import * as listr from '../../../third-party-wrappers/listr';
-import * as listrTaskImplementations from '../../../src/github/listr-tasks';
+import * as listrTaskImplementations from '../../../src/travis-ci/listr-tasks';
 import setToken from '../../../src/github/set-token';
 import {requireTokenValue} from '../../../src/prompt-validations';
 
@@ -16,7 +16,7 @@ suite('set token', () => {
 
     sandbox.stub(inquirer, 'prompt');
     sandbox.stub(listr, 'default');
-    sandbox.stub(listrTaskImplementations, 'setToken');
+    sandbox.stub(listrTaskImplementations, 'getTokenSetter');
   });
 
   teardown(() => sandbox.restore());
@@ -31,7 +31,9 @@ suite('set token', () => {
     const setTokenFunctions = any.listOf(() => () => undefined, {size: repos.length});
     const repoTaskFunctions = zip(repos, setTokenFunctions);
     const taskDefinitions = repoTaskFunctions.map(([repoName, setTokenFunction]) => {
-      listrTaskImplementations.setToken.withArgs(tokenName, tokenValue, account, repoName).returns(setTokenFunction);
+      listrTaskImplementations.getTokenSetter
+        .withArgs(tokenName, tokenValue, account, repoName)
+        .returns(setTokenFunction);
       return {title: `Setting ${tokenName} for ${repoName}`, task: setTokenFunction};
     });
     listr.default.withArgs(taskDefinitions, {concurrent: true}).returns({run});
