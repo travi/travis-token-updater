@@ -3,7 +3,7 @@ import generateTravisClient from './travis-ci/client-factory';
 import {choose} from './account';
 import listJavaScriptRepoNames from './github/determine-js-projects';
 import chooseReposFromList from './github/choose-from-list';
-import setToken from './github/set-token';
+import setToken from './travis-ci/set-token';
 import netrc from '../third-party-wrappers/netrc';
 
 export default async function ({githubAccount} = {}) {

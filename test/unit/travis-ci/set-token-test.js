@@ -4,9 +4,9 @@ import any from '@travi/any';
 import {assert} from 'chai';
 import {zip} from 'lodash';
 import * as listr from '../../../third-party-wrappers/listr';
-import * as listrTaskImplementations from '../../../src/travis-ci/listr-tasks';
-import setToken from '../../../src/github/set-token';
+import * as listrTaskImplementations from '../../../src/travis-ci/set-token-on-active-instance';
 import {requireTokenValue} from '../../../src/prompt-validations';
+import setToken from '../../../src/travis-ci/set-token';
 
 suite('set token', () => {
   let sandbox;
@@ -16,7 +16,7 @@ suite('set token', () => {
 
     sandbox.stub(inquirer, 'prompt');
     sandbox.stub(listr, 'default');
-    sandbox.stub(listrTaskImplementations, 'getTokenSetter');
+    sandbox.stub(listrTaskImplementations, 'default');
   });
 
   teardown(() => sandbox.restore());
@@ -27,12 +27,14 @@ suite('set token', () => {
     const repos = any.listOf(any.word);
     const account = any.word();
     const listrPromise = any.simpleObject();
+    const travisClient = any.simpleObject();
+    const proTravisClient = any.simpleObject();
     const run = sinon.stub();
     const setTokenFunctions = any.listOf(() => () => undefined, {size: repos.length});
     const repoTaskFunctions = zip(repos, setTokenFunctions);
     const taskDefinitions = repoTaskFunctions.map(([repoName, setTokenFunction]) => {
-      listrTaskImplementations.getTokenSetter
-        .withArgs(tokenName, tokenValue, account, repoName)
+      listrTaskImplementations.default
+        .withArgs(tokenName, tokenValue, account, repoName, travisClient, proTravisClient)
         .returns(setTokenFunction);
       return {title: `Setting ${tokenName} for ${repoName}`, task: setTokenFunction};
     });
@@ -55,7 +57,7 @@ suite('set token', () => {
       ])
       .resolves({tokenName, tokenValue});
 
-    const promise = await setToken(repos, account);
+    const promise = await setToken(repos, account, travisClient, proTravisClient);
 
     assert.calledWithNew(listr.default);
     assert.equal(promise, listrPromise);

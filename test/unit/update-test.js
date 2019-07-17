@@ -6,7 +6,7 @@ import * as githubClientFactory from '../../src/github/client-factory';
 import * as accountChooser from '../../src/account/choose';
 import * as jsRepos from '../../src/github/determine-js-projects';
 import * as chooseReposFromList from '../../src/github/choose-from-list';
-import * as tokenSetter from '../../src/github/set-token';
+import * as tokenSetter from '../../src/travis-ci/set-token';
 import * as travisClientFactory from '../../src/travis-ci/client-factory';
 import {update} from '../../src';
 

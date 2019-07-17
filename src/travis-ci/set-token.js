@@ -1,9 +1,9 @@
 import {prompt} from 'inquirer';
 import Listr from '../../third-party-wrappers/listr';
 import {requireTokenValue} from '../prompt-validations';
-import {getTokenSetter} from '../travis-ci/listr-tasks';
+import getActiveInstanceTokenSetter from './set-token-on-active-instance';
 
-export default async function (repos, account) {
+export default async function (repos, account, travisClient, proTravisClient) {
   const {tokenName, tokenValue} = await prompt([
     {
       type: 'list',
@@ -20,9 +20,9 @@ export default async function (repos, account) {
   ]);
 
   const tasks = new Listr(
-    repos.map(repoName => ({
-      title: `Setting ${tokenName} for ${repoName}`,
-      task: getTokenSetter(tokenName, tokenValue, account, repoName)
+    repos.map(repositoryName => ({
+      title: `Setting ${tokenName} for ${repositoryName}`,
+      task: getActiveInstanceTokenSetter(tokenName, tokenValue, account, repositoryName, travisClient, proTravisClient)
     })),
     {concurrent: true}
   );
