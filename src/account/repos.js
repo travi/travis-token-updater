@@ -4,7 +4,7 @@ async function accountTypeIsUser(account, octokit) {
   return account === (await getUserDetails(octokit)).login;
 }
 
-export async function listNames(octokit, account) {
+export async function listRepos(octokit, account) {
   const options = await accountTypeIsUser(account, octokit)
     ? octokit.repos.list.endpoint.merge({affiliation: 'owner'})
     : octokit.repos.listForOrg.endpoint.merge({org: account});
@@ -12,6 +12,5 @@ export async function listNames(octokit, account) {
 
   return repos
     .filter(repo => !repo.archived)
-    .filter(repo => !repo.fork)
-    .map(repo => repo.name);
+    .filter(repo => !repo.fork);
 }

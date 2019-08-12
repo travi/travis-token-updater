@@ -14,7 +14,7 @@ suite('js projects from github', () => {
     sandbox = sinon.createSandbox();
 
     sandbox.stub(listr, 'default');
-    sandbox.stub(repos, 'listNames');
+    sandbox.stub(repos, 'listRepos');
   });
 
   teardown(() => sandbox.restore());
@@ -33,7 +33,7 @@ suite('js projects from github', () => {
         {title: 'Filtering to JavaScript projects', task: determineJsProjects}
       ])
       .returns({run});
-    repos.listNames.withArgs(client, account).resolves(repoNames);
+    repos.listRepos.withArgs(client, account).resolves(repoNames);
 
     const promise = filter(client, account);
 

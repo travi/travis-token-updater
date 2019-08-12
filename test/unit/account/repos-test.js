@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import {assert} from 'chai';
 import any from '@travi/any';
-import {listNames} from '../../../src/account/repos';
+import {listRepos} from '../../../src/account/repos';
 import * as userFetcher from '../../../src/account/user';
 
 suite('account repos', () => {
@@ -13,7 +13,7 @@ suite('account repos', () => {
     archived: any.boolean(),
     fork: any.boolean()
   }));
-  const nonArchivedSourceRepoNames = repos.filter(repo => !repo.archived && !repo.fork).map(repo => repo.name);
+  const nonArchivedSourceRepos = repos.filter(repo => !repo.archived && !repo.fork);
   const requestOptions = any.simpleObject();
 
   setup(() => {
@@ -32,7 +32,7 @@ suite('account repos', () => {
     merge.withArgs({affiliation: 'owner'}).returns(requestOptions);
     paginate.withArgs(requestOptions).resolves(repos);
 
-    assert.deepEqual(await listNames(client, account), nonArchivedSourceRepoNames);
+    assert.deepEqual(await listRepos(client, account), nonArchivedSourceRepos);
   });
 
   test('that the repo names for the user account are listed', async () => {
@@ -43,6 +43,6 @@ suite('account repos', () => {
     merge.withArgs({org: account}).returns(requestOptions);
     paginate.withArgs(requestOptions).resolves(repos);
 
-    assert.deepEqual(await listNames(client, account), nonArchivedSourceRepoNames);
+    assert.deepEqual(await listRepos(client, account), nonArchivedSourceRepos);
   });
 });

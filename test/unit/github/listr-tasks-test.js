@@ -13,7 +13,7 @@ suite('github listr tasks', () => {
   setup(() => {
     sandbox = sinon.createSandbox();
 
-    sandbox.stub(repos, 'listNames');
+    sandbox.stub(repos, 'listRepos');
     sandbox.stub(languageResolver, 'default');
     sandbox.stub(execa, 'default');
   });
@@ -24,12 +24,12 @@ suite('github listr tasks', () => {
     const client = any.simpleObject();
     const account = any.word();
     const context = {...any.simpleObject(), octokit: client, account};
-    const repoNames = any.listOf(any.word);
-    repos.listNames.withArgs(client, account).resolves(repoNames);
+    const repoList = any.listOf(() => ({name: any.word()}));
+    repos.listRepos.withArgs(client, account).resolves(repoList);
 
     await listRepoNames(context);
 
-    assert.equal(context.repoNames, repoNames);
+    assert.equal(context.repos, repoList);
   });
 
   suite('Travis-CI config file', () => {

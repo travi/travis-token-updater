@@ -1,11 +1,11 @@
 /* eslint no-param-reassign: off */
-import {listNames as listRepoNamesFor} from '../account/repos';
+import {listRepos as listReposFor} from '../account/repos';
 import determineLanguageFrom from './determine-language-from-config';
 
 export async function listRepoNames(context) {
   const {octokit, account} = context;
 
-  context.repoNames = await listRepoNamesFor(octokit, account);
+  context.repos = await listReposFor(octokit, account);
 }
 
 export function fetchTravisConfigFileFactory(repoName) {

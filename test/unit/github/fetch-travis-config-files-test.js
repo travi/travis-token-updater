@@ -19,17 +19,17 @@ suite('travis config files fetcher', () => {
   teardown(() => sandbox.restore());
 
   test('that the config files are fetched for each repo', () => {
-    const repoNames = any.listOf(any.word);
-    const configFileFetchFunctions = any.listOf(() => () => undefined, {size: repoNames.length});
+    const repos = any.listOf(() => ({name: any.word()}));
+    const configFileFetchFunctions = any.listOf(() => () => undefined, {size: repos.length});
     const listrTasks = any.simpleObject();
-    const repoTaskFunctions = zip(repoNames, configFileFetchFunctions);
-    const taskDefinitions = repoTaskFunctions.map(([repoName, configFileFetchFunction]) => {
-      listrTaskImplementations.fetchTravisConfigFileFactory.withArgs(repoName).returns(configFileFetchFunction);
-      return {title: `Fetching .travis.yml from ${repoName}`, task: configFileFetchFunction};
+    const repoTaskFunctions = zip(repos, configFileFetchFunctions);
+    const taskDefinitions = repoTaskFunctions.map(([repo, configFileFetchFunction]) => {
+      listrTaskImplementations.fetchTravisConfigFileFactory.withArgs(repo.name).returns(configFileFetchFunction);
+      return {title: `Fetching .travis.yml from ${repo.name}`, task: configFileFetchFunction};
     });
     listr.default.withArgs(taskDefinitions, {concurrent: true}).returns(listrTasks);
 
-    const tasks = fetchTravisConfigsFor({repoNames});
+    const tasks = fetchTravisConfigsFor({repos});
 
     assert.calledWithNew(listr.default);
     assert.equal(tasks, listrTasks);
