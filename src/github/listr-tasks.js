@@ -2,7 +2,7 @@
 import {listRepos as listReposFor} from '../account/repos';
 import determineLanguageFrom from './determine-language-from-config';
 
-export async function listRepoNames(context) {
+export async function listRepos(context) {
   const {octokit, account} = context;
 
   context.repos = await listReposFor(octokit, account);

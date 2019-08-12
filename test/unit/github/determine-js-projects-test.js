@@ -5,7 +5,7 @@ import * as listr from '../../../third-party-wrappers/listr';
 import * as repos from '../../../src/account/repos';
 import filter from '../../../src/github/determine-js-projects';
 import fetchTravisConfigFiles from '../../../src/github/fetch-travis-config-files';
-import {determineJsProjects, listRepoNames} from '../../../src/github/listr-tasks';
+import {determineJsProjects, listRepos} from '../../../src/github/listr-tasks';
 
 suite('js projects from github', () => {
   let sandbox;
@@ -28,7 +28,7 @@ suite('js projects from github', () => {
     run.withArgs({account, octokit: client, travisConfigs: {}}).returns(listrPromise);
     listr.default
       .withArgs([
-        {title: `Determining list of repositories for ${account}`, task: listRepoNames},
+        {title: `Determining list of repositories for ${account}`, task: listRepos},
         {title: 'Fetching Travis-CI config files for each repository', task: fetchTravisConfigFiles},
         {title: 'Filtering to JavaScript projects', task: determineJsProjects}
       ])

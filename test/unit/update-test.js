@@ -8,6 +8,7 @@ import * as jsRepos from '../../src/github/determine-js-projects';
 import * as chooseReposFromList from '../../src/github/choose-from-list';
 import * as tokenSetter from '../../src/travis-ci/set-token';
 import * as travisClientFactory from '../../src/travis-ci/client-factory';
+import * as reposExpander from '../../src/repos-expander';
 import {update} from '../../src';
 
 suite('update tokens', () => {
@@ -17,6 +18,9 @@ suite('update tokens', () => {
   const githubClient = any.simpleObject();
   const travisClient = any.simpleObject();
   const proTravisClient = any.simpleObject();
+  const repos = any.listOf(any.simpleObject);
+  const chosenRepoNames = any.listOf(any.word);
+  const chosenRepos = any.listOf(any.simpleObject);
 
   setup(() => {
     sandbox = sinon.createSandbox();
@@ -30,6 +34,7 @@ suite('update tokens', () => {
     sandbox.stub(console, 'log');
     sandbox.stub(console, 'error');
     sandbox.stub(netrc, 'default');
+    sandbox.stub(reposExpander, 'expandDetailsFromNames');
 
     netrc.default.returns({'github.com': {login: githubAccessToken}});
     githubClientFactory.factory.withArgs(githubAccessToken).returns(githubClient);
@@ -44,13 +49,11 @@ suite('update tokens', () => {
 
   test('that tokens get updated for the chosen account', async () => {
     const account = any.word();
-    const repoNames = any.listOf(any.word);
-    const travisConfigs = any.simpleObject();
     const jsProjects = any.listOf(any.word);
-    const chosenRepos = any.listOf(any.word);
     accountChooser.choose.withArgs(githubClient).resolves(account);
-    jsRepos.default.withArgs(githubClient, account).resolves({repoNames, travisConfigs, jsProjects});
-    chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepos);
+    jsRepos.default.withArgs(githubClient, account).resolves({repos, jsProjects});
+    chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepoNames);
+    reposExpander.expandDetailsFromNames.withArgs(chosenRepoNames, repos).returns(chosenRepos);
 
     await update();
 
@@ -59,12 +62,11 @@ suite('update tokens', () => {
 
   test('that account choice step when explicitly defined', async () => {
     const githubAccount = any.word();
-    const repoNames = any.listOf(any.word);
     const travisConfigs = any.simpleObject();
     const jsProjects = any.listOf(any.word);
-    const chosenRepos = any.listOf(any.word);
-    jsRepos.default.withArgs(githubClient, githubAccount).resolves({repoNames, travisConfigs, jsProjects});
-    chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepos);
+    jsRepos.default.withArgs(githubClient, githubAccount).resolves({repos, travisConfigs, jsProjects});
+    chooseReposFromList.default.withArgs(jsProjects).resolves(chosenRepoNames);
+    reposExpander.expandDetailsFromNames.withArgs(chosenRepoNames, repos).returns(chosenRepos);
 
     await update({githubAccount});
 

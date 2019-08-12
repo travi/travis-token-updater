@@ -5,7 +5,7 @@ import {zip} from 'lodash';
 import * as execa from '../../../third-party-wrappers/execa';
 import * as repos from '../../../src/account/repos';
 import * as languageResolver from '../../../src/github/determine-language-from-config';
-import {determineJsProjects, fetchTravisConfigFileFactory, listRepoNames} from '../../../src/github/listr-tasks';
+import {determineJsProjects, fetchTravisConfigFileFactory, listRepos} from '../../../src/github/listr-tasks';
 
 suite('github listr tasks', () => {
   let sandbox;
@@ -27,7 +27,7 @@ suite('github listr tasks', () => {
     const repoList = any.listOf(() => ({name: any.word()}));
     repos.listRepos.withArgs(client, account).resolves(repoList);
 
-    await listRepoNames(context);
+    await listRepos(context);
 
     assert.equal(context.repos, repoList);
   });
