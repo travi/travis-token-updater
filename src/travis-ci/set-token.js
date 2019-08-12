@@ -20,9 +20,9 @@ export default async function (repos, account, travisClient, proTravisClient) {
   ]);
 
   const tasks = new Listr(
-    repos.map(repositoryName => ({
-      title: `Setting ${tokenName} for ${repositoryName}`,
-      task: getActiveInstanceTokenSetter(tokenName, tokenValue, account, repositoryName, travisClient, proTravisClient)
+    repos.map(repository => ({
+      title: `Setting ${tokenName} for ${repository.name}`,
+      task: getActiveInstanceTokenSetter(tokenName, tokenValue, account, repository, travisClient, proTravisClient)
     })),
     {concurrent: true}
   );

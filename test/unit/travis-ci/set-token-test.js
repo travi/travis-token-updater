@@ -24,7 +24,7 @@ suite('set token', () => {
   test('that the token is set for each repository', async () => {
     const tokenName = any.word();
     const tokenValue = any.word();
-    const repos = any.listOf(any.word);
+    const repos = any.listOf(() => ({...any.simpleObject(), name: any.word()}));
     const account = any.word();
     const listrPromise = any.simpleObject();
     const travisClient = any.simpleObject();
@@ -32,11 +32,11 @@ suite('set token', () => {
     const run = sinon.stub();
     const setTokenFunctions = any.listOf(() => () => undefined, {size: repos.length});
     const repoTaskFunctions = zip(repos, setTokenFunctions);
-    const taskDefinitions = repoTaskFunctions.map(([repoName, setTokenFunction]) => {
+    const taskDefinitions = repoTaskFunctions.map(([repo, setTokenFunction]) => {
       listrTaskImplementations.default
-        .withArgs(tokenName, tokenValue, account, repoName, travisClient, proTravisClient)
+        .withArgs(tokenName, tokenValue, account, repo, travisClient, proTravisClient)
         .returns(setTokenFunction);
-      return {title: `Setting ${tokenName} for ${repoName}`, task: setTokenFunction};
+      return {title: `Setting ${tokenName} for ${repo.name}`, task: setTokenFunction};
     });
     listr.default.withArgs(taskDefinitions, {concurrent: true}).returns({run});
     run.returns(listrPromise);
