@@ -35,7 +35,7 @@ suite('account repos', () => {
     assert.deepEqual(await listRepos(client, account), nonArchivedSourceRepos);
   });
 
-  test('that the repo names for the user account are listed', async () => {
+  test('that the repo names for the organization account are listed', async () => {
     const merge = sinon.stub();
     const paginate = sinon.stub();
     const client = {...any.simpleObject(), paginate, repos: {...any.simpleObject(), listForOrg: {endpoint: {merge}}}};
