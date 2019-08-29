@@ -102,7 +102,7 @@ suite('travis-ci listr tasks', () => {
       const outerTask = any.simpleObject();
       execa.default.resolves();
 
-      await getTokenSetter(tokenName, tokenValue, account, repoName, outerTask)({pro: true}, task);
+      await getTokenSetter(tokenName, tokenValue, account, repoName, outerTask)({com: true}, task);
 
       assert.equal(outerTask.title, `Set ${tokenName} for ${account}/${repoName} on travis-ci.com`);
       assert.calledWith(

@@ -16,10 +16,10 @@ export function getActiveChecker(travisClient, travisInstance, account, reposito
 }
 
 export function getTokenSetter(tokenName, tokenValue, account, repoName, outerTask) {
-  return async ({pro}) => execa(
+  return async ({com}) => execa(
     'travis',
-    ['env', 'set', tokenName, tokenValue, '--repo', `${account}/${repoName}`, ...pro ? ['--pro'] : []]
+    ['env', 'set', tokenName, tokenValue, '--repo', `${account}/${repoName}`, ...com ? ['--pro'] : []]
   ).then(() => {
-    outerTask.title = `Set ${tokenName} for ${account}/${repoName} on travis-ci.${pro ? 'com' : 'org'}`;
+    outerTask.title = `Set ${tokenName} for ${account}/${repoName} on travis-ci.${com ? 'com' : 'org'}`;
   });
 }
