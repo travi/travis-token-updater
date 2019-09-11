@@ -8,9 +8,15 @@ tool for rolling tokens for multiple projects across an account
 
 ## Purpose
 
-This tool will scan your GitHub account's repositories for JavaScript projects and make it simple to update the value of the `NPM_TOKEN` or `GH_TOKEN` encrypted environment variable on Travis CI for each project. 
+This tool will scan your GitHub account's repositories for JavaScript projects
+and make it simple to update the value of the `NPM_TOKEN` or `GH_TOKEN`
+encrypted environment variable on Travis CI for each project.
 
-This is especially useful for an `NPM_TOKEN` that is CIDR restricted to work only on valid Travis CI servers. This restriction depends on the public IP addresses of those servers, which do change occasionally. When the list changes, a [new token with the proper IPs must be created](https://gist.github.com/travi/f91c73610fa49769d90e3ee3b66cfbee) and used instead of the previous token that now has an outdated list of IPs.
+This is especially useful for an `NPM_TOKEN` that is CIDR restricted to work
+only on valid Travis CI servers. This restriction depends on the public IP
+addresses of those servers, which do change occasionally. When the list changes,
+a [new token with the proper IPs must be created](https://gist.github.com/travi/f91c73610fa49769d90e3ee3b66cfbee)
+and used instead of the previous token that now has an outdated list of IPs.
 
 ## Usage
 

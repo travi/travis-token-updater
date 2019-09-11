@@ -11,6 +11,7 @@
   "author": "Matt Travi <npm@travi.org> (https://matt.travi.org/)",
   "scripts": {
     "clean": "rimraf lib/",
+    "lint:md": "remark . --frail",
     "lint:js": "eslint . --cache",
     "lint:gherkin": "gherkin-lint",
     "lint:travis": "travis-lint .travis.yml",
@@ -76,6 +77,9 @@
     "js-yaml": "^3.12.1",
     "listr": "^0.14.3",
     "netrc": "^0.1.4",
+    "remark": "^11.0.1",
+    "remark-cli": "^7.0.0",
+    "remark-preset-lint-travi": "^1.2.1",
     "travis-ci": "2.2.0"
   }
 }
