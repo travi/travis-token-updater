@@ -7,6 +7,16 @@ tool for rolling tokens for multiple projects across an account
 [![Build Status][ci-badge]][ci-link]
 [![Codecov][coverage-badge]][coverage-link]
 
+## Table of Contents
+
+* [Purpose](#purpose)
+* [Usage](#usage)
+  * [Installation](#installation)
+  * [Authentication](#authentication)
+* [Contributing](#contributing)
+  * [Dependencies](#dependencies)
+  * [Verification](#verification)
+
 ## Purpose
 
 This tool will scan your GitHub account's repositories for JavaScript projects
