@@ -18,6 +18,16 @@ tool for rolling tokens for multiple projects across an account
 $ npm install travis-token-updater
 ```
 
+### Authentication
+
+A GitHub personal access token is needed to interaction the the GitHub and Travis CI APIs.
+
+Add a [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line)
+to your [`~/.netrc` file](https://ec.haxx.se/usingcurl-netrc.html)
+
+    machine github.com
+      login <personal access token here>
+
 ## Contributing
 
 <!-- contribution badges -->
