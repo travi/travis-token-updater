@@ -13,8 +13,10 @@ tool for rolling tokens for multiple projects across an account
 * [Usage](#usage)
   * [Installation](#installation)
   * [Authentication](#authentication)
+  * [Example](#example)
+    * [Dependencies:](#dependencies)
 * [Contributing](#contributing)
-  * [Dependencies](#dependencies)
+  * [Dependencies](#dependencies-1)
   * [Verification](#verification)
 
 ## Purpose
@@ -28,6 +30,10 @@ only on valid Travis CI servers. This restriction depends on the public IP
 addresses of those servers, which do change occasionally. When the list changes,
 a [new token with the proper IPs must be created](https://gist.github.com/travi/f91c73610fa49769d90e3ee3b66cfbee)
 and used instead of the previous token that now has an outdated list of IPs.
+
+:warning: This package provides only the programmatic API that enables rolling
+the tokens on Travis CI, but is expected to be run interactively. You are
+expected to provide [your own CLI wrapper](#example).
 
 ## Usage
 
@@ -52,6 +58,31 @@ to your [`~/.netrc` file](https://ec.haxx.se/usingcurl-netrc.html)
 
     machine github.com
       login <personal access token here>
+
+### Example
+
+#### Dependencies:
+
+```javascript
+import yargs from 'yargs';
+import {update as updateTravisTokens} from 'travis-token-updater';
+```
+
+#### Register with the framework of your choise (yargs is used here)
+
+```javascript
+yargs
+  .scriptName('form8ion-utils')
+  .usage('Usage: $0 <cmd> [args]')
+  .command(
+    'travis-tokens',
+    'Roll token for Travis projects throughout the organization',
+    () => updateTravisTokens({githubAccount: '<your github account here (optionally)>'})
+  )
+  .help('h')
+  .alias('h', 'help')
+  .argv;
+```
 
 ## Contributing
 
