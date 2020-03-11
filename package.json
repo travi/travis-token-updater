@@ -76,7 +76,7 @@
     "travis-lint": "^1.0.0"
   },
   "dependencies": {
-    "@octokit/rest": "^16.33.1",
+    "@octokit/rest": "^17.1.0",
     "execa": "^4.0.0",
     "inquirer": "^7.0.0",
     "js-yaml": "^3.12.1",
