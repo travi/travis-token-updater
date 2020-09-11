@@ -1,4 +1,4 @@
-import {OK} from 'http-status-codes';
+import {StatusCodes} from 'http-status-codes';
 import {After, Before, Given} from 'cucumber';
 import nock from 'nock';
 import any from '@travi/any';
@@ -17,13 +17,13 @@ Given('the repository is {word}', async function () {
   apiScope
     .matchHeader('Authorization', `token ${this.githubAccessToken}`)
     .get('/user')
-    .reply(OK, {
+    .reply(StatusCodes.OK, {
       login: any.word()
     });
   apiScope
     .matchHeader('Authorization', `token ${this.githubAccessToken}`)
     .get('/user/orgs')
-    .reply(OK, [{
+    .reply(StatusCodes.OK, [{
       login: any.word()
     }]);
 });
