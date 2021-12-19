@@ -30,7 +30,8 @@
     "build": "run-s clean build:*",
     "build:js": "rollup -c",
     "watch": "run-s 'build:js -- --watch'",
-    "prepack": "run-s build"
+    "prepack": "run-s build",
+    "prepare": "husky install"
   },
   "publishConfig": {
     "access": "public"
@@ -60,7 +61,7 @@
     "debug": "4.1.1",
     "gherkin-lint": "4.0.0",
     "http-status-codes": "1.3.2",
-    "husky": "4.0.3",
+    "husky": "7.0.4",
     "lodash": "4.17.21",
     "mocha": "7.0.1",
     "nock": "12.0.0",
