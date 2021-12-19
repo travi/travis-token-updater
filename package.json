@@ -75,7 +75,7 @@
     "rollup": "2.61.1",
     "rollup-plugin-auto-external": "2.0.0",
     "rollup-plugin-node-resolve": "5.2.0",
-    "sinon": "9.0.0"
+    "sinon": "9.2.4"
   },
   "dependencies": {
     "@octokit/rest": "^16.33.1",
