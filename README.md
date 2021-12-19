@@ -2,10 +2,12 @@
 
 tool for rolling tokens for multiple projects across an account
 
-<!-- status badges -->
+<!--status-badges start -->
 
 [![Build Status][ci-badge]][ci-link]
 [![Codecov][coverage-badge]][coverage-link]
+
+<!--status-badges end -->
 
 ## Table of Contents
 
@@ -37,10 +39,12 @@ expected to provide [your own CLI wrapper](#example).
 
 ## Usage
 
-<!-- consumer badges -->
+<!--consumer-badges start -->
 
 [![npm][npm-badge]][npm-link]
 [![MIT license][license-badge]][license-link]
+
+<!--consumer-badges end -->
 
 ### Installation
 
@@ -86,13 +90,15 @@ yargs
 
 ## Contributing
 
-<!-- contribution badges -->
+<!--contribution-badges start -->
 
 [![Conventional Commits][commit-convention-badge]][commit-convention-link]
 [![Commitizen friendly][commitizen-badge]][commitizen-link]
 [![semantic-release][semantic-release-badge]][semantic-release-link]
 [![PRs Welcome][PRs-badge]][PRs-link]
 [![Greenkeeper badge](https://badges.greenkeeper.io/travi/travis-token-updater.svg)](https://greenkeeper.io/)
+
+<!--contribution-badges end -->
 
 ### Dependencies
 
