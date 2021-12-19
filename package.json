@@ -14,7 +14,6 @@
     "lint:md": "remark . --frail",
     "lint:js": "eslint . --cache",
     "lint:gherkin": "gherkin-lint",
-    "lint:travis": "travis-lint .travis.yml",
     "lint:sensitive": "ban",
     "pretest": "run-s clean",
     "test": "npm-run-all --print-label build --parallel lint:* test:*",
@@ -76,8 +75,7 @@
     "rollup": "2.0.0",
     "rollup-plugin-auto-external": "2.0.0",
     "rollup-plugin-node-resolve": "5.2.0",
-    "sinon": "9.0.0",
-    "travis-lint": "1.0.0"
+    "sinon": "9.0.0"
   },
   "dependencies": {
     "@octokit/rest": "^16.33.1",

@@ -4,8 +4,8 @@ tool for rolling tokens for multiple projects across an account
 
 <!--status-badges start -->
 
-[![Build Status][ci-badge]][ci-link]
 [![Codecov][coverage-badge]][coverage-link]
+[![Node CI Workflow Status][github-actions-ci-badge]][github-actions-ci-link]
 
 <!--status-badges end -->
 
@@ -121,10 +121,6 @@ $ npm test
 
 [license-badge]: https://img.shields.io/github/license/travi/travis-token-updater.svg
 
-[ci-link]: https://travis-ci.com/travi/travis-token-updater
-
-[ci-badge]: https://img.shields.io/travis/com/travi/travis-token-updater/master.svg
-
 [coverage-link]: https://codecov.io/github/travi/travis-token-updater
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/travi/travis-token-updater.svg
@@ -144,3 +140,7 @@ $ npm test
 [PRs-link]: http://makeapullrequest.com
 
 [PRs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
+
+[github-actions-ci-link]: https://github.com/travi/travis-token-updater/actions?query=workflow%3A%22Node.js+CI%22+branch%3Amaster
+
+[github-actions-ci-badge]: https://github.com/travi/travis-token-updater/workflows/Node.js%20CI/badge.svg
