@@ -81,7 +81,7 @@
     "@octokit/rest": "^16.33.1",
     "execa": "^4.0.0",
     "inquirer": "^8.0.0",
-    "js-yaml": "^3.12.1",
+    "js-yaml": "^4.0.0",
     "listr": "^0.14.3",
     "netrc": "^0.1.4",
     "travis-ci": "2.2.0"
