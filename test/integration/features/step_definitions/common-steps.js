@@ -1,4 +1,4 @@
-import {After, Before} from 'cucumber';
+import {After, Before} from '@cucumber/cucumber';
 import nock from 'nock';
 
 Before(function () {

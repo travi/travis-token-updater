@@ -1,4 +1,4 @@
-import {Given, Then, When} from 'cucumber';
+import {Given, Then, When} from '@cucumber/cucumber';
 import {execute} from '../../../../src/update';
 import {factory as generateGithubClient} from '../../../../src/github/client-factory';
 
