@@ -1,5 +1,5 @@
 import {StatusCodes} from 'http-status-codes';
-import {After, Before, Given} from 'cucumber';
+import {After, Before, Given} from '@cucumber/cucumber';
 import nock from 'nock';
 import any from '@travi/any';
 
