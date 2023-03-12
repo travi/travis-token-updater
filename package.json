@@ -74,7 +74,7 @@
     "rimraf": "4.4.0",
     "rollup": "3.19.1",
     "rollup-plugin-auto-external": "2.0.0",
-    "sinon": "15.0.1"
+    "sinon": "15.0.2"
   },
   "dependencies": {
     "@octokit/rest": "^16.33.1",
